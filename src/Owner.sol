@@ -6,12 +6,18 @@ pragma solidity >=0.7.0 <0.9.0;
 /// @dev Set & change owner
 
 contract Owner{
+
     address private owner;
 
-    //event for EVM logging
+    //an event for EVM logging
+    //what is 'indexed'?
+
     event OwnerSet(address indexed oldOwner, address indexed newOwner);
 
     //Checks if the caller is the owner
+    //What is 'modifier'?
+    //a code that can be reused in a functions in the contract
+
     modifier isOwner() {
         //if the first argument is 'false' -
         //The execution will end and all changes to the status and to Ether balances will be returned
@@ -29,6 +35,10 @@ contract Owner{
     /// @dev Change owner
     /// @param newOwner address of new owner
 
+   //Changing owners 
+   // and checking that the owner is the one who called the function
+   // using the modifier
+
     function changeOwner(address newOwner) public isOwner {
         emit OwnerSet(owner, newOwner);
         owner = newOwner;
@@ -36,6 +46,8 @@ contract Owner{
 
     /// @dev Return owner address
     /// @return address of owner
+
+    //what does external mean?
 
     function getOwner() external view returns (address) {
         return owner;
