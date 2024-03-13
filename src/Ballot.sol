@@ -18,7 +18,7 @@ contract Ballot {
     }
 
     struct Proposal {
-        // short name (up to 32 bytes)
+        // short name (up to 32 bytes) 
         bytes32 name;
         // number of accumulated votes
         uint voteCount;
@@ -33,6 +33,10 @@ contract Ballot {
     /// @dev Create a new ballot to choose one of 'proposalNames'.
     /// @param proposalNames names of proposals
 
+    // what does memory mean?
+    // it's used to specify a variable that it should be stored in memory and not in storage,
+    // that means that it will only exist during the time that the function is called
+  
     constructor(bytes32[] memory proposalNames) {
         chairperson = msg.sender;
         voters[chairperson].weight = 1;
@@ -60,17 +64,25 @@ contract Ballot {
     /// @dev Delegate your vote to the voter 'to'.
     /// @param to address to which vote is delegated
 
+    //what does delegate mean?
+
     function delegate(address to) public {
+        //what does storage mean?
+        //it means that the variable will be stored 
+        // in the blockchain specifically in the contract storage
+
         Voter storage sender = voters[msg.sender];
         require(!sender.voted, "Yoy already voted.");
         require(to != msg.sender, "Self-delegation is disallowed.");
+         
+        //we use address(0) to check an invalid address or a null address
 
         while (voters[to].delegate != address(0)) {
             to = voters[to].delegate;
 
-            // We found a loop in the delegation, not allowed.
             require(to != msg.sender, "Found loop in delegation.");
         }
+
         sender.voted = true;
         sender.delegate = to;
         Voter storage delegate_ = voters[to];
@@ -79,7 +91,7 @@ contract Ballot {
             proposals[delegate_.vote].voteCount += sender.weight;
         }
         else {
-            // if the delegate didnwt vote yet, add to her weight
+            // if the delegate didn't vote yet, add to her weight
             delegate_.weight += sender.weight;
         }
     }
@@ -94,7 +106,7 @@ contract Ballot {
         sender.voted = true;
         sender.vote = proposal;
 
-        // if 'proposal' is out of the range of the array, this will throw automatically and revent all changes.
+        //add his vote
         proposals[proposal].voteCount += sender.weight;
     }
 
