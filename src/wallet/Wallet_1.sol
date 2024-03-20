@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.24;
 
-/// @title BeitHaknesset
-/// @author Chana Kastner
+/// @title Wallet1
+/// @author Chana Kastner;
 
-contract BeitHaknesset {
+contract Wallet_1 {
     address public owner;
 
     mapping(address => bool) public gabaim;
