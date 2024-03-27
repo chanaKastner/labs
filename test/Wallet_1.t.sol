@@ -69,9 +69,6 @@ contract Wallet_1Test is Test {
         assertTrue(wallet.gabaim(sender));
         assertEq(wallet.gabaim(address(this)), false);
     }
-
-    
- 
 }
 
 
