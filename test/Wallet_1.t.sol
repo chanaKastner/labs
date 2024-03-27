@@ -33,6 +33,7 @@ contract Wallet_1Test is Test {
 
         assertEq(address(wallet).balance, balance + depositAmount);
     }
+    
     function test_withdraw() public {
         uint256 withdrawAmount = 5;  
         uint256 balance = address(wallet).balance;
@@ -51,26 +52,15 @@ contract Wallet_1Test is Test {
         assertEq(address(wallet).balance, balance);
         vm.stopPrank();
     }
-
-  
-
-
-        
-//האם יש מספיק כסף למשוך
-// האם המושך הוא מורשה
-// אחרי המשיכה - האם נשאר כמצופה
-// האם העברה באמת בוצעה
     
     function test_addGabaim() public {
         wallet.addGabaim(sender);
-        // console.log(gabai);
         assertTrue(wallet.gabaim(sender));
     }
 
     function test_deleteGabai() public {
         wallet.addGabaim(sender);
         wallet.deleteGabai(sender);
-        // console.log(address(0));
         assertEq(wallet.gabaim(sender), false);
     }
 

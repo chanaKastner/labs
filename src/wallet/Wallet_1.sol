@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
+import "forge-std/console.sol";
+
+
 /// @title Wallet1
 /// @author Chana Kastner;
 
@@ -11,11 +14,13 @@ contract Wallet_1 {
 
     uint256 public gabaimCount;
 
-    uint256 constant MAX_GABAIM = 3;
+    uint256 constant MAX_GABAIM = 4;
 
     constructor() {
         owner = msg.sender;
+        console.log("owner:", msg.sender);
         gabaim[msg.sender] = true;
+        gabaimCount = 1;
     }
 
     modifier onlyOwner() {
@@ -30,7 +35,7 @@ contract Wallet_1 {
     /// @dev Withdraw money from the wallet
     /// @param withdrawAmount - the amount of ETH to withdraw
 
-    function withdraw(uint256 withdrawAmount) public onlyOwner {
+    function withdraw(uint256 withdrawAmount) public {
         require(gabaim[msg.sender], "Only the owner & the gabaim can withdraw");
 
         require(
