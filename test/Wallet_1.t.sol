@@ -19,6 +19,8 @@ contract Wallet_1Test is Test {
         sender = msg.sender;
     }
 
+    receive() payable external{}
+
     function test_getBalance() public {
         assertEq(address(wallet).balance, wallet.getBalance());
     }
@@ -32,17 +34,14 @@ contract Wallet_1Test is Test {
         assertEq(address(wallet).balance, balance + depositAmount);
     }
     function test_withdraw() public {
-        uint256 withdrawAmount = 5;
-        address allowedUser = 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496;
-        vm.startPrank(allowedUser);  
+        uint256 withdrawAmount = 5;  
         uint256 balance = address(wallet).balance;
         // console.log(sender.balance); 
         wallet.withdraw(withdrawAmount);
         assertEq(address(wallet).balance, balance - withdrawAmount);
-        vm.stopPrank();
     }
    
-    function test_failedwithdraw() public {
+    function test_withdrawFailed() public {
         uint256 withdrawAmount = 2;
         address userAddress = vm.addr(12); 
         vm.startPrank(userAddress); 
