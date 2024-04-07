@@ -66,7 +66,7 @@ contract Wallet_1 {
     /// @param gabai - the gabai i want to delete
 
     function deleteGabai(address gabai) public onlyOwner {
-        require(gabai!=owner, "Be careful! You try to remove yourself");
+        // require(gabai!=owner, "Be careful! You try to remove yourself");
         require(gabaim[gabai] == true, "Gabai does not exist");
         delete gabaim[gabai];
         gabaimCount--;
