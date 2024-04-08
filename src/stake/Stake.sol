@@ -3,18 +3,17 @@ pragma solidity ^0.8.24;
 import "../../lib/solmate/src/tokens/ERC20.sol";
 
 /// @author Chana Kastner
-/// @title stake together 
-contract Stake is ERC20{
-
+/// @title stake together
+contract Stake is ERC20 {
     address public owner;
-    uint public totalReward = 1000000;
-    uint public totalStaking;
-    uint public beginDate;
-    mapping(address => uint) public stakers;
-    mapping(address => uint) public dates;
+    uint256 public totalReward = 1000000;
+    uint256 public totalStaking;
+    uint256 public beginDate;
+    mapping(address => uint256) public stakers;
+    mapping(address => uint256) public dates;
 
-    constructor() ERC20("MyToken", "MTK", 16){
-        _mint(address(this), totalReward * (10 ** uint(16)));
+    constructor() ERC20("MyToken", "MTK", 16) {
+        _mint(msg.sender, totalReward * (10 ** uint256(16)));
         owner = msg.sender;
         totalStaking = 0;
     }
@@ -22,7 +21,7 @@ contract Stake is ERC20{
     receive() external payable {}
 
     /// @dev Recieve the staked coins and saved the date
-    function staking(uint value) external payable {
+    function staking(uint256 value) external payable {
         require(value > 0, "you didn't stake enough coins");
         dates[msg.sender] = block.timestamp;
         stakers[msg.sender] += value;
@@ -30,11 +29,11 @@ contract Stake is ERC20{
         transferFrom(msg.sender, address(this), value);
     }
 
-    /// @dev the staker can pull all his coins with getting his rewards 
+    /// @dev the staker can pull all his coins with getting his rewards
     function unlockAll() external {
         require(stakers[msg.sender] > 0, "You don't have locked coins");
         require(dates[msg.sender] + 7 days <= block.timestamp, "you aren't entitled to get reward");
-        uint reward = stakers[msg.sender]/totalStaking*totalReward;
+        uint256 reward = stakers[msg.sender] / totalStaking * totalReward;
         transfer(msg.sender, reward + stakers[msg.sender]);
         totalStaking -= stakers[msg.sender];
         delete stakers[msg.sender];
@@ -42,29 +41,19 @@ contract Stake is ERC20{
     }
 
     /// @dev The staker can unlock some of his coins and getting a reward accordingly
-        function unlock(uint amount) external {
+    function unlock(uint256 amount) external {
         require(stakers[msg.sender] > 0, "You don't have locked coins");
         require(stakers[msg.sender] > amount, "You don't have enough locked coins");
         require(dates[msg.sender] + 7 days <= block.timestamp, "you aren't entitled to get reward");
-        uint reward = amount/totalStaking*totalReward;
+        uint256 reward = amount / totalStaking * totalReward;
         transfer(msg.sender, reward + amount);
         totalStaking -= amount;
     }
 
-    /// @dev withdraw 
+    /// @dev withdraw
     function withdraw() public {
         require(dates[msg.sender] + 7 days > block.timestamp, "You can earn a reward");
-        uint amount = stakers[msg.sender];
+        uint256 amount = stakers[msg.sender];
         transfer(msg.sender, amount);
     }
-
-    // if the stakers adds coins
-    // if the staker wants his coins before 7 days
-    // if he wants to take out only some of his coins
-
-
-
-
-
 }
-
