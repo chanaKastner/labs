@@ -56,7 +56,7 @@ contract Wallet_1 {
     /// @param gabai - the gabai i want to add
 
     function addGabaim(address gabai) public onlyOwner {
-        require(gabaim[gabai] == false, "Gabai already exists");
+        // require(gabaim[gabai] == false, "Gabai already exists");
         require(gabaimCount < MAX_GABAIM, "Maximum gabaim reached");
         gabaim[gabai] = true;
         gabaimCount++;

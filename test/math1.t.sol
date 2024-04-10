@@ -11,9 +11,9 @@ contract Math1Test is Test {
     }
 
 
-    function test_math1() public {
+    function test_math1() public view {
        uint WAD = 10**18;
-       uint RAY = 10**27;
+    //    uint RAY = 10**27;
 
        uint a = 2; 
        uint b = 1000;
