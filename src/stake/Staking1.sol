@@ -26,7 +26,7 @@ contract Staking1 is ERC20 {
 
     /// @dev Recieve the staked coins and saved the date
     function staking(uint256 amount) public payable {
-        // require(amount > 0, "you didn't stake enough coins");
+        require(amount > 0, "you didn't stake enough coins");
         dates[msg.sender] = block.timestamp;
         stakers[msg.sender] += amount;
         console.log("amount!", amount);
@@ -51,7 +51,7 @@ contract Staking1 is ERC20 {
     function unlock(uint256 amount) external {
         require(stakers[msg.sender] > 0, "You don't have locked coins");
         require(stakers[msg.sender] > amount, "You don't have enough locked coins");
-        require(dates[msg.sender] + 7 days <= block.timestamp, "you aren't entitled to get reward");
+        // require(dates[msg.sender] + 7 days <= block.timestamp, "you aren't entitled to get reward");
         uint256 reward = amount / totalStaking * totalReward;
         _mint(address(this), reward);
         transfer(msg.sender, amount);
