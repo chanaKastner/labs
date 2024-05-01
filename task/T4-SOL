@@ -1,0 +1,15 @@
+Stake specs:
+     From the day the contract is deployed - any one can stake his tokens on the contract and recieve rewards.
+     The stakerhas to lock his tokens for atlist 7 days, after 7 days he can unlock his tokens and recieve his reward
+     the reward is calculated like this: his percent of staking from the totak staking * the total reward.
+
+  Srakers:
+   * staker 1: Stakes 4,000 tokens on day 3 (begin-date), his tokens are locked for 7 days, on day 10 - he can pull all his coins with getting his rewards;
+   * staker 2: Stakes 10,000 tokens on day 5 (begin-date), his tokens are locked for 7 days, on day 12 - he can pull all his coins with getting his rewards;
+   * staker 3: Stakes 2,000 tokens on day 10 (begin-date), his tokens are locked for 7 days, on day 10 - he can pull all his coins with getting his rewards;
+  
+  Rewards:
+    * staker 1: after 7 days (on day 10) he unlockes his tokens and gets a reward 250000 (the total staking 16000);
+      [reward = 4,000/16,000*1,000,000]
+    * staker 2: after 7 days (on day 12) he unlockes his tokens and gets a reward 833,333 (the total staking 12000);
+      [reward = 10,000/12,000*1,000,000]
