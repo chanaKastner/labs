@@ -4,26 +4,28 @@ import "foundry-huff/HuffDeployer.sol";
 import "forge-std/Test.sol";
 import "forge-std/console.sol";
 import "@hack/stake/Staking1.sol";
-
+import "../../../src/stake/MyERC20.sol";
 
 contract staking1Test is Test {
     Staking1 public stake;
+    MyToken public token;
 
    function setUp() public {
-        stake = new Staking1();  
+        token = new MyToken();
+        stake = new Staking1(address(token));  
         stake.mint(address(this), 600000);
 
         // stake.mint(address(stake), stake.totalReward());
     }
     function test_staking() public {
-        uint totalReward  = stake.totalReward();
+        // uint totalReward  = stake.totalReward();
         uint totalStaking = stake.totalStaking();
         uint amount       = 1;
         uint stakerAmount = stake.stakers(address(this));
        
         vm.warp(1648739200);
 
-        stake.approve(address(this), amount);
+        token.approve(address(this), amount);
         stake.staking(1);
         console.log("date:", stake.dates(address(this)));
         console.log("today:", block.timestamp);
@@ -34,7 +36,7 @@ contract staking1Test is Test {
     }
 
     function test_unlockAll() public {
-        stake.approve(address(this), 10000000000);
+        token.approve(address(this), 10000000000);
         vm.warp(1648739200);
 
         stake.staking(5000);
@@ -49,7 +51,7 @@ contract staking1Test is Test {
 
         vm.warp(1648739200);
 
-        stake.approve(address(this), 100000000);
+        token.approve(address(this), 100000000);
         stake.staking(3000);
 
         vm.warp(1648739200 + 8 days);
