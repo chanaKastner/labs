@@ -20,8 +20,7 @@ contract staking2Test is Test {
         stakingToken = new MyToken();
         rewardsToken = new MyToken();
         sr = new StakingRewards(address(stakingToken), address(rewardsToken));
-        
-
+    
     }
 
     function test_stakingRewards() public {
