@@ -1,0 +1,12 @@
+// swap1: 5 usdc -> ??? turt
+
+// r0'' = 21 // usdc
+// r1'' = 42 // turt
+
+// amountIn = 5
+// withFee = 4.985
+
+// amountOut = (r1'' * withFee) / (r0'' + withFee) // 209.37 / 25.985 = 8.057
+
+// r0'' = 26
+// r1'' = 34
