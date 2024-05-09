@@ -118,15 +118,15 @@ contract Amm {
 
     }
 
-    function removeLiquidity(uint value) public {
-        require(a.balanceOf(msg.sender) * price() >= value);
-        require(b.balanceOf(msg.sender) * price() >= value);
+    // function removeLiquidity(uint value) public {
+    //     // require(a.balanceOf(msg.sender) * price() >= value);
+    //     // require(b.balanceOf(msg.sender) * price() >= value);
 
         
 
-         sqrtK = WAD * sqrt(balanceABefore * balanceBBefore);
+    //      sqrtK = WAD * sqrt(balanceABefore * balanceBBefore);
 
 
-    }
+    // }
 
 }
