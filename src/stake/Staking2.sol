@@ -3,7 +3,6 @@
 // Code is a stripped down version of Synthetix
 pragma solidity ^0.8.20;
 import "@openzeppelin/ERC20/IERC20.sol";
-import "forge-std/console.sol";
 contract StakingRewards {
     IERC20 public immutable stakingToken;
     IERC20 public immutable rewardsToken;
@@ -77,10 +76,7 @@ contract StakingRewards {
     function updateRate(uint256 amount) external
     onlyOwner updateReward(address(0)) {
         if (block.timestamp >= finish) {
-            
-            rate = amount*1e18 / duration;
-            console.log("duration",duration);
-            console.log(amount);
+            rate = amount / duration;
         } else {
             uint remaining = (finish - block.timestamp);
             uint leftover  = remaining * rate;
@@ -93,7 +89,7 @@ contract StakingRewards {
         // Reward + leftover must be less than 2^256 / 10^18 to
         // avoid overflow.
         uint balance = rewardsToken.balanceOf(address(this));
-        require(rate/ 1e18 <= balance / duration, "provided reward too high");
+        require(rate <= balance / duration, "provided reward too high");
         finish  = block.timestamp + duration;
         updated = block.timestamp;
     }
