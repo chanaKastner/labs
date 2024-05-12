@@ -6,11 +6,15 @@ import "foundry-huff/HuffDeployer.sol";
 import "forge-std/Test.sol";
 import "forge-std/console.sol";
 import "@hack/auction/auction.sol";
-contract AuctionTest is Test{
+import "@openzeppelin/ERC721/IERC721.sol";
+contract AuctionTest is Test {
     Auction br;
+    IERC721 token;
+
 
     function setUp() public {
-        br = new Auction{ value: 20000} (1648739200);
+        token = new IERC721("NFT", "nft");
+        br = new Auction(address(token));
     }
 
     function test_placeBid() public {
@@ -19,7 +23,7 @@ contract AuctionTest is Test{
         vm.warp(1648739200 - 3 days);
         vm.deal(bidder, 1000);
         console.log("bidder balance before:", bidder.balance);
-        br.placesBid{ value:500 }();
+        br.placesBid{ value:500 }(1);
         console.log("bidder balance after:", bidder.balance);
        
     }
