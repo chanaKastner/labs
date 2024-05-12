@@ -3,7 +3,7 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/ERC721/IERC721.sol";
-
+import "forge-std/console.sol";
 
 
 contract Auction {
@@ -42,12 +42,12 @@ contract Auction {
     function startAuction(uint _nftId, uint numDays) external {
         require(numDays > 0, "Num days must be bigger than zero");
         require(auctions[_nftId].seller == address(0), "Auction already exist");        
-
+    
         auctions[_nftId].seller = msg.sender;
         auctions[_nftId].started = true;
         auctions[_nftId].endTime = block.timestamp + numDays;  
-
-        NFT.safeTransferFrom(msg.sender, address(this), _nftId);
+console.log("ssssssssssssss");
+        NFT.transferFrom(msg.sender, address(this), _nftId);
 
         emit Start(block.timestamp, auctions[_nftId].endTime, _nftId);
     }
