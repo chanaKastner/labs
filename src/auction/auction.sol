@@ -2,39 +2,54 @@
 
 pragma solidity ^0.8.24;
 
+import "@openzeppelin/ERC721/ERC721.sol";
+import "@openzeppelin/ERC20/IERC20.sol";
+
+
 
 
 contract Auction {
 
-//   struct auctionSeller {
-//         bool public started;
-//         uint public endTime; 
-//         mapping(address => uint)public bidders;
-//         address public highestBidder;
-//         uint public highestBid;
-//     }
+  struct auctionSeller {
+    address seller;    
+    address[] biddersArr;
+    mapping(address => uint) bidders;
+
+    bool started = false;
+    uint endTime; 
+
+    uint tokenId;
+    IERC271 NFT;
+    // IERC20  tokenERC20;
     
-    address  owner;
-    mapping(address => uint)public bidders;
-    bool public started;
-    uint public endTime;
-    address public highestBidder;
-    uint public highestBid;
+    address highestBidder;
+    uint highestBid;
+    }
+
     error err(string message);
 
-    constructor(uint _endTime) payable {
-        owner = msg.sender;
-        started = true;
-        endTime = _endTime;
-    
-        emit Start(block.timestamp, endTime, msg.value);
+    mapping(uint => auctionSeller) public auctions;
+
+    uint counter = 0;
+
+    constructor(uint _endTime) payable {    
+        // emit Start(block.timestamp, endTime, msg.value);
     }
 
     event Start(uint startTime, uint endTime, uint NFT);
-
     event Bid(address sender, uint amount);
 
-      receive() external payable {}
+    receive() external payable {}
+
+    function setEndTime(uint auctionId, uint _endTime) public {
+        require(auctions[auctionId].seller == msg.sender); // only seller...
+        auctions[auctionId].endTime = _endTime;
+    }
+
+    function startAuction(address _NFT, uint _endTime, uint ) {
+        
+
+    }
     
     function placesBid() public payable{
         if(block.timestamp > endTime) {
