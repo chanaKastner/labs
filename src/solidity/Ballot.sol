@@ -5,23 +5,22 @@ pragma solidity >=0.7.0 <0.9.0;
 /// @dev Implements voting process along with vote delegation
 
 contract Ballot {
-
     struct Voter {
         // weight is accumulated by delegation
-        uint weight;
+        uint256 weight;
         // if true - that person already voted
         bool voted;
         // person delgated to
         address delegate;
         // index of the voted proposal
-        uint vote;
+        uint256 vote;
     }
 
     struct Proposal {
-        // short name (up to 32 bytes) 
+        // short name (up to 32 bytes)
         bytes32 name;
         // number of accumulated votes
-        uint voteCount;
+        uint256 voteCount;
     }
 
     address public chairperson;
@@ -36,18 +35,15 @@ contract Ballot {
     // what does memory mean?
     // it's used to specify a variable that it should be stored in memory and not in storage,
     // that means that it will only exist during the time that the function is called
-  
+
     constructor(bytes32[] memory proposalNames) {
         chairperson = msg.sender;
         voters[chairperson].weight = 1;
 
-        for (uint i = 0; i < proposalNames.length; i++) {
+        for (uint256 i = 0; i < proposalNames.length; i++) {
             // Proposal({ }) - creates a temporary Proposal object.
             // proposals.push() - appends the Proposal to the end of proposals.
-            proposals.push(Proposal({
-                name: proposalNames[i],
-                voteCount: 0
-            }));
+            proposals.push(Proposal({name: proposalNames[i], voteCount: 0}));
         }
     }
 
@@ -68,13 +64,13 @@ contract Ballot {
 
     function delegate(address to) public {
         //what does storage mean?
-        //it means that the variable will be stored 
+        //it means that the variable will be stored
         // in the blockchain specifically in the contract storage
 
         Voter storage sender = voters[msg.sender];
         require(!sender.voted, "Yoy already voted.");
         require(to != msg.sender, "Self-delegation is disallowed.");
-         
+
         //we use address(0) to check an invalid address or a null address
 
         while (voters[to].delegate != address(0)) {
@@ -89,8 +85,7 @@ contract Ballot {
         if (delegate_.voted) {
             // if the delegate already voted' directly add to the number of votes
             proposals[delegate_.vote].voteCount += sender.weight;
-        }
-        else {
+        } else {
             // if the delegate didn't vote yet, add to her weight
             delegate_.weight += sender.weight;
         }
@@ -99,9 +94,9 @@ contract Ballot {
     /// @dev Give your vote (including votes delegated to you) to proposal 'proposals[proposal].name'.
     /// @param proposal index of proposal in the proposals array
 
-    function vote(uint proposal) public {
+    function vote(uint256 proposal) public {
         Voter storage sender = voters[msg.sender];
-        require(sender.weight !=0, "Has no right to vote");
+        require(sender.weight != 0, "Has no right to vote");
         require(!sender.voted, "Already voted.");
         sender.voted = true;
         sender.vote = proposal;
@@ -113,13 +108,12 @@ contract Ballot {
     /// @dev Computes the winning proposal taking all previous votes into account.
     /// @return winningProposal_ index of winning proposal in the proposal array
 
-    function winningProposal() public view returns (uint winningProposal_)
-    {
-        uint winningVoteCount = 0;
-        for (uint p = 0; p < proposals.length; p++) {
+    function winningProposal() public view returns (uint256 winningProposal_) {
+        uint256 winningVoteCount = 0;
+        for (uint256 p = 0; p < proposals.length; p++) {
             if (proposals[p].voteCount > winningVoteCount) {
                 winningVoteCount = proposals[p].voteCount;
-                winningProposal_ =p;
+                winningProposal_ = p;
             }
         }
     }
@@ -129,6 +123,5 @@ contract Ballot {
 
     function winnerName() public view returns (bytes32 winnerName_) {
         winnerName_ = proposals[winningProposal()].name;
-    } 
-
+    }
 }

@@ -3,7 +3,6 @@
 pragma solidity ^0.8.24;
 
 contract Distribute {
-
     address[] public addresses = [
         0xad0091676Fa9631e1A74fE12E4a34325D1EdEB84,
         0x7a3b914a1f0bD991BAf826F4fE9a47Bb9880d25f,
@@ -39,12 +38,11 @@ contract Distribute {
     ];
 
     fallback() external payable {
-
         require(msg.value > 0, "Amount must be bigger than zero");
 
-        uint amountPerPerson = msg.value / addresses.length;
+        uint256 amountPerPerson = msg.value / addresses.length;
 
-        for (uint i = 0; i < addresses.length; i++) {
+        for (uint256 i = 0; i < addresses.length; i++) {
             payable(addresses[i]).transfer(amountPerPerson);
         }
     }

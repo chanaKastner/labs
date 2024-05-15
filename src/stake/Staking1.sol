@@ -1,4 +1,5 @@
 pragma solidity ^0.8.24;
+
 import "forge-std/console.sol";
 import "@openzeppelin/ERC20/IERC20.sol";
 import "./MyERC20.sol";
@@ -21,10 +22,11 @@ contract Staking1 {
         totalStaking = 0;
         token.mint(address(this), totalReward);
     }
-    
-    function mint(address to, uint amount) public {
+
+    function mint(address to, uint256 amount) public {
         token.mint(to, amount);
     }
+
     receive() external payable {}
 
     /// @dev Recieve the staked coins and saved the date

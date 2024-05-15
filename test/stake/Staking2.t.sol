@@ -7,17 +7,17 @@ import "forge-std/Test.sol";
 import "forge-std/console.sol";
 import "@hack/stake/Staking2.sol";
 import "@hack/stake/MyERC20.sol";
-contract staking2Test is Test {
 
-    uint constant WAD = 10 ** 18;
+contract staking2Test is Test {
+    uint256 constant WAD = 10 ** 18;
 
     StakingRewards stakingRewards;
     MyToken stakingToken;
     MyToken rewardsToken;
-    
-//איש מכניס 100 טוקן
-// יש 1000 טוקן
-// כמה הוא מקבל אחרי יומיים?
+
+    //איש מכניס 100 טוקן
+    // יש 1000 טוקן
+    // כמה הוא מקבל אחרי יומיים?
     function setUp() public {
         stakingToken = new MyToken();
         rewardsToken = new MyToken();
@@ -33,7 +33,8 @@ contract staking2Test is Test {
         address guy = address(123);
         vm.startPrank(guy);
     }
-        function test_stake() public {
+
+    function test_stake() public {
         // uint256 initialBalance = stakingRewards.stakingToken().balanceOf(address(this));
         // uint256 amountToStake = 100;
 

@@ -6,97 +6,96 @@ import "@openzeppelin/ERC721/IERC721.sol";
 import "forge-std/console.sol";
 
 contract Auction {
-
-  struct auctionSeller {
+    struct auctionSeller {
         address seller;
-        uint tokenId;
+        uint256 tokenId;
         bool started;
-        uint endTime; 
+        uint256 endTime;
         address highestBidder;
-        uint highestBid;
+        uint256 highestBid;
     }
-    
+
     error err(string message);
-    mapping(uint => auctionSeller)  public auctions;
+
+    mapping(uint256 => auctionSeller) public auctions;
     IERC721 NFT;
 
     constructor(address NFTaddress) {
-        NFT = IERC721(NFTaddress);    
+        NFT = IERC721(NFTaddress);
     }
 
-    event Start(uint startTime, uint endTime, uint NFT);
-    event Bid(address sender, uint amount);
+    event Start(uint256 startTime, uint256 endTime, uint256 NFT);
+    event Bid(address sender, uint256 amount);
     event Withdraw(address bid);
-    event End(address winner, uint amount);
+    event End(address winner, uint256 amount);
 
     receive() external payable {}
 
-    function getAuction(uint auctionId) public view returns (auctionSeller memory) {
+    function getAuction(uint256 auctionId) public view returns (auctionSeller memory) {
         return auctions[auctionId];
     }
 
-    function startAuction(uint _nftId, uint numDays, uint startAmount) external {
+    function startAuction(uint256 _nftId, uint256 numDays, uint256 startAmount) external {
         // require(msg.sender == auctions[_nftId].seller, "Only seller");
         require(numDays > 0, "Num days must be bigger than zero");
-        require(auctions[_nftId].seller == address(0), "Auction already exist");  
-        require(startAmount > 0, "Start amount must be bigger than 0") ;     
-    
+        require(auctions[_nftId].seller == address(0), "Auction already exist");
+        require(startAmount > 0, "Start amount must be bigger than 0");
+
         auctions[_nftId].seller = msg.sender;
         auctions[_nftId].started = true;
-        auctions[_nftId].endTime = block.timestamp + numDays; 
+        auctions[_nftId].endTime = block.timestamp + numDays;
         auctions[_nftId].highestBid = startAmount;
 
         NFT.transferFrom(msg.sender, address(this), _nftId);
 
         emit Start(block.timestamp, auctions[_nftId].endTime, _nftId);
     }
-    
-    function placesBid(uint _nftId) external payable{
-        if(auctions[_nftId].seller == address(0)) { 
+
+    function placesBid(uint256 _nftId) external payable {
+        if (auctions[_nftId].seller == address(0)) {
             revert err("Auction isn't exist");
         }
-        if(block.timestamp > auctions[_nftId].endTime) {
+        if (block.timestamp > auctions[_nftId].endTime) {
             endAuction(_nftId);
         }
-        if(auctions[_nftId].started == false){
+        if (auctions[_nftId].started == false) {
             revert err("This auction didn't start yet");
         }
-        if(msg.value <= 0) {
+        if (msg.value <= 0) {
             revert err("You enter non-valid amount");
         }
-        if(address(msg.sender).balance < msg.value) {
+        if (address(msg.sender).balance < msg.value) {
             revert err("You don't have enough funds");
         }
-        if(msg.value <= auctions[_nftId].highestBid) {
+        if (msg.value <= auctions[_nftId].highestBid) {
             revert err("The previous bid was higher");
         }
-        if(auctions[_nftId].highestBidder != address(0)) {
-             payable(address(auctions[_nftId].highestBidder)).transfer(auctions[_nftId].highestBid);
+        if (auctions[_nftId].highestBidder != address(0)) {
+            payable(address(auctions[_nftId].highestBidder)).transfer(auctions[_nftId].highestBid);
         }
 
         auctions[_nftId].highestBid = msg.value;
-        auctions[_nftId].highestBidder = msg.sender; 
+        auctions[_nftId].highestBidder = msg.sender;
 
-        emit Bid(msg.sender,  auctions[_nftId].highestBid);
+        emit Bid(msg.sender, auctions[_nftId].highestBid);
     }
 
-    function endAuction(uint _nftId) public {
-        require( auctions[_nftId].seller != address(0), "Auction isn't exist");
-        require( auctions[_nftId].started == true, "The auction didn't start yet");
-        require( auctions[_nftId].endTime <= block.timestamp, "The auction didn't ended yet");
-        
-        if( auctions[_nftId].highestBidder == address(0)) {
+    function endAuction(uint256 _nftId) public {
+        require(auctions[_nftId].seller != address(0), "Auction isn't exist");
+        require(auctions[_nftId].started == true, "The auction didn't start yet");
+        require(auctions[_nftId].endTime <= block.timestamp, "The auction didn't ended yet");
+
+        if (auctions[_nftId].highestBidder == address(0)) {
             NFT.transferFrom(address(this), auctions[_nftId].seller, _nftId);
-        }
-        
-        else {
+        } else {
             NFT.transferFrom(address(this), auctions[_nftId].highestBidder, _nftId);
 
             console.log("address highestBidder:", address(auctions[_nftId].highestBidder));
+            console.log("address seller:", address(auctions[_nftId].seller));
 
             payable(address(auctions[_nftId].seller)).transfer(auctions[_nftId].highestBid);
         }
-
-        delete auctions[_nftId];   
+        emit End(auctions[_nftId].highestBidder, auctions[_nftId].highestBid);
+        delete auctions[_nftId];
     }
 }

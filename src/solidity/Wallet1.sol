@@ -5,24 +5,22 @@ pragma solidity ^0.8.24;
 /// @author Chana Kastner
 
 contract Wallet {
-      
     address public owner;
 
-    mapping (address=> bool)  public gabaim;
+    mapping(address => bool) public gabaim;
 
     constructor() {
-        owner = msg.sender;    
+        owner = msg.sender;
     }
 
     /// @dev a function that can recieve money that was deposited to my wallet
 
-    receive() external payable { }
+    receive() external payable {}
 
     /// @dev Withdraw money from the wallet
     /// @param withdrawAmount - the amount of ETH to withdraw
 
     function withdraw(uint256 withdrawAmount) public {
-       
         require(gabaim[msg.sender], "WALLET-not-owner");
 
         require(address(this).balance >= withdrawAmount, "There is not enough Eth to withdraw");

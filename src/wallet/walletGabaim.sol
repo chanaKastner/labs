@@ -3,7 +3,6 @@ pragma solidity ^0.8.24;
 
 import "forge-std/console.sol";
 
-
 /// @title Wallet1
 /// @author Chana Kastner;
 
@@ -34,16 +33,12 @@ contract Wallet_1 {
     /// @dev Withdraw money from the wallet
     /// @param withdrawAmount - the amount of ETH to withdraw
 
-    function withdraw(uint256 withdrawAmount) public  {
+    function withdraw(uint256 withdrawAmount) public {
         require(gabaim[msg.sender], "Only the owner & the gabaim can withdraw");
 
-        require(
-            address(this).balance >= withdrawAmount,
-            "There is not enough Eth to withdraw"
-        );
+        require(address(this).balance >= withdrawAmount, "There is not enough Eth to withdraw");
 
         payable(msg.sender).transfer(withdrawAmount);
-
     }
 
     /// @dev View the wallet's balance

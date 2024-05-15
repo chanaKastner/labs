@@ -5,8 +5,7 @@ pragma solidity >=0.7.0 <0.9.0;
 /// @title Owner
 /// @dev Set & change owner
 
-contract Owner{
-
+contract Owner {
     address private owner;
 
     //an event for EVM logging
@@ -35,9 +34,9 @@ contract Owner{
     /// @dev Change owner
     /// @param newOwner address of new owner
 
-   //Changing owners 
-   // and checking that the owner is the one who called the function
-   // using the modifier
+    //Changing owners
+    // and checking that the owner is the one who called the function
+    // using the modifier
 
     function changeOwner(address newOwner) public isOwner {
         emit OwnerSet(owner, newOwner);
