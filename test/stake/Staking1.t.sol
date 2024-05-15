@@ -6,6 +6,7 @@ import "forge-std/console.sol";
 import "@hack/stake/Staking1.sol";
 
 
+
 contract staking1Test is Test {
     Staking1 public stake;
 
@@ -24,7 +25,7 @@ contract staking1Test is Test {
 //         vm.warp(1648739200);
 
         stake.approve(address(this), amount);
-        stake.staking(1);
+        stake.staking(amount);
         console.log("date:", stake.dates(address(this)));
         console.log("today:", block.timestamp);
 
@@ -44,25 +45,24 @@ contract staking1Test is Test {
 
     }
 
-//     function test_unlock() public {
-//         uint amount = 1000;
+    function test_unlock() public {
+        uint amount = 1000;
 
-//         vm.warp(1648739200);
+        vm.warp(1648739200);
 
         stake.approve(address(this), 100000000);
         stake.staking(3000);
 
-//         vm.warp(1648739200 + 8 days);
-//         console.log("date:", 1648739200 + 9 days);
-//         stake.unlock(amount);                                                                       
+        vm.warp(1648739200 + 8 days);
+        console.log("date:", 1648739200 + 9 days);
+        stake.unlock(amount);                                                                       
 
 
     }
 
 //     function test_withdraw() public {
         
-//     }
+    }
 
 
 
-// }

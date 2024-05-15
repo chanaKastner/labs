@@ -88,7 +88,7 @@ contract CP {
         token2.transfer(msg.sender, amount2);
     }
 
-    function sqrt(uint y) private pure returns (uint z) {
+    function sqrt(uint y) public pure returns (uint z) {
         if (y > 3) {
             z = y;
             uint x = y / 2 + 1;

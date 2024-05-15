@@ -9,7 +9,9 @@ import "@hack/stake/Staking2.sol";
 import "@hack/stake/MyERC20.sol";
 contract staking2Test is Test {
 
-    StakingRewards sr;
+    uint constant WAD = 10 ** 18;
+
+    StakingRewards stakingRewards;
     MyToken stakingToken;
     MyToken rewardsToken;
     
@@ -19,20 +21,48 @@ contract staking2Test is Test {
     function setUp() public {
         stakingToken = new MyToken();
         rewardsToken = new MyToken();
-        sr = new StakingRewards(address(stakingToken), address(rewardsToken));
-    
+        stakingRewards = new StakingRewards(address(stakingToken), address(rewardsToken));
+        rewardsToken.mint(address(stakingRewards), 100000 * WAD);
     }
 
     function test_stakingRewards() public {
         // vm.warp(1735689600);
-        sr.updateRate(1000);
-        console.log("rate:", sr.rate());
+        stakingRewards.updateRate(1000);
+        console.log("rate:", stakingRewards.rate());
 
         address guy = address(123);
         vm.startPrank(guy);
+    }
+        function test_stake() public {
+        // uint256 initialBalance = stakingRewards.stakingToken().balanceOf(address(this));
+        // uint256 amountToStake = 100;
 
+        // stakingRewards.stake(amountToStake);
 
+        // uint256 finalBalance = stakingRewards.stakingToken().balanceOf(address(this));
+        // assertTrue(finalBalance == initialBalance - amountToStake, "Staking failed");
+    }
 
+    function test_withdraw() public {
+        // uint256 amountToStake = 100;
+        // stakingRewards.stake(amountToStake);
 
+        // uint256 initialBalance = stakingRewards.stakingToken().balanceOf(address(this));
+
+        // stakingRewards.withdraw(amountToStake);
+
+        // uint256 finalBalance = stakingRewards.stakingToken().balanceOf(address(this));
+        // assertTrue(finalBalance == initialBalance + amountToStake, "Withdrawal failed");
+    }
+
+    function test_getReward() public {
+        // uint256 amountToStake = 100;
+        // stakingRewards.stake(amountToStake);
+
+        // uint256 initialRewardBalance = stakingRewards.rewardsToken().balanceOf(address(this));
+        // stakingRewards.getReward();
+        // uint256 finalRewardBalance = stakingRewards.rewardsToken().balanceOf(address(this));
+
+        // assertTrue(finalRewardBalance != initialRewardBalance, "Reward not received");
     }
 }

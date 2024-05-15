@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 // https://medium.com/@marketing.blockchain/how-to-create-a-multisig-wallet-in-solidity-cfb759dbdb35
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.24;
 
 contract Distribute {
 
@@ -39,10 +39,13 @@ contract Distribute {
     ];
 
     fallback() external payable {
-        uint share = msg.value / addresses.length;
+
+        require(msg.value > 0, "Amount must be bigger than zero");
+
+        uint amountPerPerson = msg.value / addresses.length;
 
         for (uint i = 0; i < addresses.length; i++) {
-            payable(addresses[i]).transfer(share);
+            payable(addresses[i]).transfer(amountPerPerson);
         }
     }
 }

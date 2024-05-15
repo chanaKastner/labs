@@ -3,25 +3,28 @@ pragma solidity ^0.8.24;
 import "foundry-huff/HuffDeployer.sol";
 import "forge-std/Test.sol";
 import "forge-std/console.sol";
-import "@hack/CP/cp.sol";
+import "@hack/cp/cp.sol";
 import "@openzeppelin/ERC20/IERC20.sol";
 import "../../../src/myTokens/token1.sol";
 import "../../../src/myTokens/token2.sol";
 
 
-contract cpTest is Test {
+contract CpTest is Test {
     Token1 public token1;
     Token2 public token2;
     CP public cp;
 
   function setUp() public {
-    cp = new CP(address(token1), address(token2));
-
     token1 = new Token1();
     token2 = new Token2();
+    cp = new CP(address(token1), address(token2));
+
 
     token1.mint(msg.sender, 10000000);
+    token1.mint(address(this), 10000000);
     token2.mint(msg.sender, 10000000);
+    token2.mint(address(this), 10000000);
+
   } 
 
   // function test_mint() public {
@@ -45,12 +48,62 @@ contract cpTest is Test {
     
   // }  
   function test_swap() public {
-    
-    
+        vm.startPrank(address(4));
+        token1.mint(address(4), 500);
+        token1.approve(address(cp),5);
+        cp.swap(address(token1), 5);
+        console.log("token1:", token1.balanceOf(address(this)));
+        console.log("token2:", token2.balanceOf(address(this)));
+        vm.stopPrank();    
   }
-  function test_addLiquidity() public {
-    
+
+  function test_addLiquidity1() public{
+      uint reserve1 = cp.reserve1();
+      uint reserve2 = cp.reserve2();
+      token1.approve(address(cp),5);
+      token2.approve(address(cp),10);
+
+      console.log("reserve1 before:", reserve1);
+      console.log("reserve2 before:", reserve2);
+
+      cp.addLiquidity(5 , 10);
+
+      console.log("reserve1 after:", cp.reserve1());
+      console.log("reserve2 after:", cp.reserve2());
+
+      uint newTotal = cp.sqrt(5*10);
+      assertEq (newTotal , cp.totalSupply());
+      assertEq (reserve1 + 5 , cp.reserve1());
+      assertEq (reserve2 + 10 , cp.reserve2());
+  }  
+  function test_addLiquidity2() public{
+      test_addLiquidity1();
+      uint total = cp.totalSupply();
+      uint reserve1 = cp.reserve1();
+      uint reserve2 = cp.reserve2();
+      token1.approve(address(cp),15);
+      token2.approve(address(cp),30);
+
+      uint share = cp.addLiquidity(15 , 30);
+
+      assertEq ((total+share),cp.totalSupply());
+      assertEq (reserve1 + 15 , cp.reserve1());
+      assertEq (reserve2 + 30 , cp.reserve2());
   }
+  function test_addLiquidity3() public{
+      test_addLiquidity2();
+      uint total = cp.totalSupply();
+      uint reserve1 = cp.reserve1();
+      uint reserve2 = cp.reserve2();
+      token1.approve(address(cp),1);
+      token2.approve(address(cp),2);
+
+      uint share = cp.addLiquidity(1, 2);
+
+      assertEq ((total+share),cp.totalSupply());
+      assertEq (reserve1 + 1 , cp.reserve1());
+      assertEq (reserve2 + 2 , cp.reserve2());
+  } 
   function test_removeLiquidity() public {
     
   }

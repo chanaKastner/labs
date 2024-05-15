@@ -12,7 +12,6 @@ contract Staking1 {
     uint256 public totalReward = 1000000;
     uint256 public totalStaking;
     uint256 WAD = 10 ** 18;
-    // uint256 public beginDate;
     mapping(address => uint256) public stakers;
     mapping(address => uint256) public dates;
 
@@ -22,6 +21,7 @@ contract Staking1 {
         totalStaking = 0;
         token.mint(address(this), totalReward);
     }
+    
     function mint(address to, uint amount) public {
         token.mint(to, amount);
     }
