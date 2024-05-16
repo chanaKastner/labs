@@ -37,6 +37,8 @@ contract Distribute {
         0x7F4Bf8251F5003bB60cb482c0a59473E1C4428d4
     ];
 
+    receive() external payable {}
+
     fallback() external payable {
         require(msg.value > 0, "Amount must be bigger than zero");
 
