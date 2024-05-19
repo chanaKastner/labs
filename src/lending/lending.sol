@@ -6,11 +6,13 @@ import "src/lending/math.sol";
 
 contract Lending is ERC20, lendingMath {
 
-    uint public totalBorrowed;  // סך הלוואות
-    uint public totalReserve; // 
-    uint public totalDeposit; //סך ההפקדות
+    uint public totalBorrowed;   // סך הלוואות
+    uint public totalReserve;    // 
+    uint public totalDeposit;    // סך ההפקדות
     uint public totalCollateral; // סך הבטחונות
-    uint public maxLTV = 4; // 1 = 20%
+    uint public maxLTV = 4;      // 1 = 20%
+    uint baseRate = 20000000000000000;
+    uint borrowRate = 300000000000000000;
 
     address public owner;
 
@@ -19,10 +21,20 @@ contract Lending is ERC20, lendingMath {
 
     IERC20 public dai;
 
+    uint constant ETHPrice = 2900;
+
+
     constructor(address daiToken) ERC20("bond", "BND") {
         dai = IERC20(daiToken);
     }
     receive() external payable {}
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "not authorized");
+        _;
+    }
+
+
 
     function deposit(uint amount) external {
         require(amount > 0, "Amount must be bigger than zero");
@@ -56,20 +68,52 @@ contract Lending is ERC20, lendingMath {
         usersCollateral[msg.sender] += msg.value;
         totalCollateral += msg.value;
     }
+
     function removeCollateral(uint amount) external {
         require(amount > 0);
-        require(usersCollateral[msg.sender] > amount, "You don't have enough collaterals");
+        require(usersCollateral[msg.sender] > 0, "You don't have any collaterals");
 
         uint borrowed    = usersBorrowed[msg.sender];
         uint collaterals = usersCollateral[msg.sender];
 
-        uint 
+        uint left = mulExp(collaterals, ETHPrice) - borrowed;
+        uint toRemove = mulExp(amount, ETHPrice);
 
+        require(toRemove < left, "You don't have enough collaterals");
 
-        
+        usersCollateral[msg.sender] -= amount;
+        totalCollateral -= amount;
+
+        payable(msg.sender).transfer(amount);        
     }
 
-////////////
+    010function borrowDai(uint amount) external {
+        require(usersCollateral[msg.sender] > 0, "You don't have any collaterals");
+
+        uint borrowed    = usersBorrowed[msg.sender];
+        uint collaterals = usersCollateral[msg.sender];
+
+    }
+
+    function repay(uint amount) external {
+        require(usersBorrowed[msg.sender] > 0, "You don't have any dep");
+        uint ratio = getExp(totalBorrowed , totalDeposit);
+        uint interestMul = getExp(borrowRate - baseRate, ratio);
+        uint rate = (ratio * interestMul) +baseRate;
+        uint fee = amount * rate;
+        uint paid = amount - fee;
+
+        totalReserve += fee;
+        usersBorrowed[msg.sender] -= paid;
+        totalBorrowed -= paid; 
+    }
+
+    function liquidation() external onlyOwner() {
+
+
+    }
+
+
 
     function getCash() public view returns (uint256) {
         return totalDeposit - totalBorrowed;
