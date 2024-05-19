@@ -1,7 +1,7 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/ERC20/IERC20.sol";
-import "@openzeppelin/ERC20/ERC20.sol";
+import "@openzeppelin/ERC20/ERC20.sol"; 
 import "src/lending/math.sol";
 
 contract Lending is ERC20, lendingMath {
@@ -23,9 +23,15 @@ contract Lending is ERC20, lendingMath {
 
     uint constant ETHPrice = 2900;
 
+    AggregatorV3Interface internal priceFeed;
+
+
 
     constructor(address daiToken) ERC20("bond", "BND") {
         dai = IERC20(daiToken);
+        priceFeed =
+        AggregatorV3Interface(0x9326BFA02ADD2366b30bacB125260Af641031331);
+
     }
     receive() external payable {}
 
@@ -87,7 +93,7 @@ contract Lending is ERC20, lendingMath {
         payable(msg.sender).transfer(amount);        
     }
 
-    010function borrowDai(uint amount) external {
+    function borrowDai(uint amount) external {
         require(usersCollateral[msg.sender] > 0, "You don't have any collaterals");
 
         uint borrowed    = usersBorrowed[msg.sender];
@@ -127,5 +133,10 @@ contract Lending is ERC20, lendingMath {
         uint256 num = cash + totalBorrowed + totalReserve;
         return getExp(num, totalSupply());
     }
+    function getLatestPrice() public view returns (int256) {
+        (, int256 price, , , ) = priceFeed.latestRoundData();
+        return price * 10**10;
+    }
+
 
 }
