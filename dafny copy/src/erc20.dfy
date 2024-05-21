@@ -62,10 +62,15 @@ class ERC20 {
     method transfer(msg: Transaction, dst: u160, wad: u256) returns (r: Result<bool>)
     modifies this`balances
     modifies this`allowance
+
     requires this.balances.default == 0
     requires msg.sender in balances.Keys()
     requires dst in balances.Keys()
-    requires msg.value == 0 {  // non-payable
+    requires msg.value == 0  // non-payable
+    requires msg.sender != 0 //check for zero sender
+    requires dst != 0        //
+    requires this.balances.Get(msg.sender) >= wad //
+    {
         r := transferFrom(msg, msg.sender, dst, wad);
     }
 
@@ -75,10 +80,18 @@ class ERC20 {
     // safe, once wad is bounded by balances[src]
     method transferFrom(msg: Transaction, src: u160, dst: u160, wad: u256) returns (r: Result<bool>)
     modifies this`balances, this`allowance
+
     requires this.balances.default == 0
     requires src in balances.Keys() && dst in balances.Keys()
     requires msg.value == 0
-    ensures r != Revert ==> sum(old(this.balances.Items())) == sum(this.balances.Items()) {
+    // requires msg.sender != dst
+    // requires dst != 0
+    // requires balances.Get(src) >= wad
+
+    ensures r != Revert ==> sum(old(this.balances.Items())) == sum(this.balances.Items()) 
+    // ensures ((old(balances).Get(src) -wad) == balances.Get(src))
+    // ensures (old(balances).Get(dst)) == (balances.Get(dst) - wad)
+    {
         assume {:axiom} (old(balances).Get(dst) as nat) + (wad as nat) <= MAX_U256;
         if balances.Get(src) < wad { return Revert; }
 

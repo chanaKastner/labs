@@ -23,7 +23,6 @@ method simple() {
 
 
 
-
 // two sets are equal if they have exactly the same elements, new sets can
 // be created from existing ones using the common set operations
 method joins() {
