@@ -4,7 +4,7 @@ import "@openzeppelin/ERC20/IERC20.sol";
 import "@openzeppelin/ERC20/ERC20.sol"; 
 import "src/lending/math.sol";
 
-contract Lending is ERC20, lendingMath {
+contract Lending, lendingMath {
 
     uint public totalBorrowed;   // סך הלוואות
     uint public totalReserve;    // 
@@ -20,17 +20,20 @@ contract Lending is ERC20, lendingMath {
     mapping(address => uint) public usersBorrowed;
 
     IERC20 public dai;
+    IERC20 public aDai;
+    IERC20 public aWeth;
+    IERC20 private weth;
 
     uint constant ETHPrice = 2900;
 
-    AggregatorV3Interface internal priceFeed;
+    ArbitrumSequencerUptimeFeed internal priceFeed;
 
 
 
     constructor(address daiToken) ERC20("bond", "BND") {
         dai = IERC20(daiToken);
         priceFeed =
-        AggregatorV3Interface(0x9326BFA02ADD2366b30bacB125260Af641031331);
+        ArbitrumSequencerUptimeFeed(0x9326BFA02ADD2366b30bacB125260Af641031331);
 
     }
     receive() external payable {}
@@ -49,6 +52,7 @@ contract Lending is ERC20, lendingMath {
         dai.transferFrom(msg.sender, address(this), amount);
                 
         totalDeposit += amount;
+
 
         uint bondsToMint = getExp(amount, getExchangeRate());
 
