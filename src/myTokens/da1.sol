@@ -1,0 +1,1 @@
+deploy dai, aDai, weth, aWeth mintable/burnable ERC20 tokens into amoy

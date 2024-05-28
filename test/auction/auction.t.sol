@@ -18,6 +18,8 @@ contract AuctionTest is Test {
         auction = new Auction(address(token));
         token.mint(address(this), 1);
     }
+    receive() external payable {}
+
 
     function test_startAuction_success() public {
         vm.warp(1648739200);

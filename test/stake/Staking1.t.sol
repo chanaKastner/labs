@@ -1,4 +1,4 @@
-// // pragma solidity ^0.8.24;
+pragma solidity ^0.8.24;
 
 // import "foundry-huff/HuffDeployer.sol";
 // import "forge-std/Test.sol";
