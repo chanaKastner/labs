@@ -3,8 +3,18 @@ pragma solidity ^0.8.24;
 import "@openzeppelin/ERC20/IERC20.sol";
 import "@openzeppelin/ERC20/ERC20.sol"; 
 import "src/lending/math.sol";
+import "forge-std/console.sol";
+import "../../lib/chainlink/contracts/src/v0.8/l2ep/dev/arbitrum/ArbitrumSequencerUptimeFeed.sol";
+import "../../lib/chainlink/contracts/src/v0.8/interfaces/FeedRegistryInterface.sol";
+// import "../../lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
+// import "../../lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol";
+import "../../lib/openzeppelin-contracts/contracts/utils/math/Math.sol";
+// import "../math/Math.sol";
+// import "../interfaces/IUniswapRouter.sol";
+// import "../interfaces/IWETHGateway.sol";
+// import "../interfaces/ILendingPool.sol";
 
-contract Lending, lendingMath {
+contract Lending is lendingMath {
 
     uint public totalBorrowed;   // סך הלוואות
     uint public totalReserve;    // 
