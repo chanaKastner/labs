@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 
- pragma solidity ^0.8.24;
+ pragma solidity ^0.8.19;
 
  contract Immutable {
 
-    address public immutable MY_ADDRESS = 0x176CA4Ed2bCEed0B49F28E1ECe6134C9F3a6daD0;
-    uint    public immutable MY_UINT    = 123;
+    address public immutable MY_ADDRESS;
+    uint    public immutable MY_UINT;
 
     constructor(uint _myUint) {
         MY_ADDRESS = msg.sender;

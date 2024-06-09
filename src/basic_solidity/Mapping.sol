@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
- pragma solidity ^0.8.24;
+ pragma solidity ^0.8.19;
 
  contract Mapping {
     mapping(address => uint ) public myMap;
 
-    function get(address add) public view returs (uint) {
+    function get(address add) public view returns (uint) {
         return myMap[add];
     }
 
@@ -20,7 +20,7 @@
  contract NestedMapping {
     mapping(address => mapping (uint => bool)) public nested;
 
-    function get(addres add, uint i) public view returns (bool) {
+    function get(address add, uint i) public view returns (bool) {
         return nested[add][i];
     }
 

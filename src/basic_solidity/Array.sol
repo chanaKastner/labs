@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
- pragma solidity ^0.8.24;
+ pragma solidity ^0.8.19;
 
  contract Array {
     uint[]   public arr1; 
@@ -14,9 +14,9 @@
         return arr1;
     }
 
-    function push(int num) public {
-        arr1.push(num);
-    }
+    // function push(int i) public {
+    //     arr1.push(i);
+    // }
 
     function pop() public {
         arr1.pop();
@@ -39,7 +39,7 @@
     uint[] public arr;
 
     function remove(uint index) public {
-        require(i < arr.length, "index out of bound");
+        require(index < arr.length, "index out of bound");
         for(uint i = index; i < arr.length - 1; i ++) {
             arr[i] = arr[i+1];
         }
@@ -71,7 +71,7 @@
     function remove(uint index) public {
         arr[index] = arr[arr.length];
 
-        srr.pop();
+        arr.pop();
     }
 
     function test() public {
@@ -85,9 +85,6 @@
         assert(arr[3] == 4);
         assert(arr.length == 4);
 
-        arr = [9, 8, 7];
-
-        remove((index));
     }
 
 

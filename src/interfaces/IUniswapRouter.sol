@@ -1,4 +1,4 @@
-pragma solidity ^0.8.24;
+pragma solidity ^0.8.19;
 pragma abicoder v2;
 
 import "src/interfaces/ISwapRouter.sol";
