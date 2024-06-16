@@ -23,7 +23,7 @@ contract Function {
         return(a, b, c, d, e);
     }
 
-    function arrayInput(uint[] memory _arr) {}
+    function arrayInput(uint[] memory _arr) public {}
 
     uint[] public arr;
     function arrayOutput() public view returns (uint[] memory) {
@@ -32,5 +32,19 @@ contract Function {
 }
 
 contract XYZ {
-    function someFuncWithManyInputs(uint )
+    function someFuncWithManyInputs(uint x, uint y, uint z, address a, bool b, string c) public pure returns (uint ) { }
+    function callFunc() external pure returns (uint256) {
+        return someFuncWithManyInputs(1, 2, 3, address(0), true, "c");
+    }
+
+    function callFuncWithKeyValue() external pure returns (uint256) {
+        return someFuncWithManyInputs({
+            a: address(0),
+            b: true,
+            c: "c",
+            x: 1,
+            y: 2,
+            z: 3
+        });
+    }
 }

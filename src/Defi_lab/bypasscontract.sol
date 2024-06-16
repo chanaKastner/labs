@@ -2,36 +2,36 @@ pragma solidity ^0.8.19;
 
 import "forge-std/Test.sol";
 
-contract ContrastTest is test {
+contract ContrastTest is Test {
     Target target;
     FailedAttack failedAttak;
-    Attack FailedAttack;
+    Attack AttackerContract;
     TargetRemediated targetRemediatedContract;
 
 constructor() {
-        TargetContract = new Target();
-        FailedAttackContract = new FailedAttack();
-        TargetRemediatedContract = new TargetRemediated();
+        target = new Target();
+        failedAttak = new FailedAttack();
+        targetRemediatedContract = new TargetRemediated();
     }
 
     function testBypassFailedContractCheck() public {
         console.log(
-            "Before exploiting, protected status of TargetContract:",
-            TargetContract.pwned()
+            "Before exploiting, protected status of target:",
+            target.pwned()
         );
         console.log("Exploit Failed");
-        FailedAttackContract.pwn(address(TargetContract));
+        failedAttak.pwn(address(target));
     }
 
     function testBypassContractCheck() public {
         console.log(
-            "Before exploiting, protected status of TargetContract:",
-            TargetContract.pwned()
+            "Before exploiting, protected status of target:",
+            target.pwned()
         );
-        AttackerContract = new Attack(address(TargetContract));
+        AttackerContract = new Attack(address(target));
         console.log(
-            "After exploiting, protected status of TargetContract:",
-            TargetContract.pwned()
+            "After exploiting, protected status of target:",
+            target.pwned()
         );
         console.log("Exploit completed");
     }
@@ -42,9 +42,9 @@ constructor() {
 contract Target {
     function isContract(address account) public view returns (bool) {
         uint size;
-        assembly {
-            size := extcodesize(account);
-        }
+        // assembly {
+        //     size := extcodesize(account);
+        // }
         return size > 0;
     }
 

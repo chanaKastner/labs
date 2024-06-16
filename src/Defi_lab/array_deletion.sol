@@ -1,4 +1,4 @@
-pragma soliddity ^0.8.19;
+pragma solidity ^0.8.19;
 
 import "forge-std/Test.sol";
 
@@ -19,10 +19,10 @@ contract contractTest is Test {
     }
 
     function test_FixedArrayDeletion() public {
-        FixedArrayDeletion.myArray(1);
-        FixedArrayDeletion.deleteElement(1);
-        FixedArrayDeletion.myArray(1);
-        FixedArrayDeletion.getLength();
+        FixedArrayDeletionContract.arr(1);
+        FixedArrayDeletionContract.deleteElement(1);
+        FixedArrayDeletionContract.arr(1);
+        FixedArrayDeletionContract.getLength();
     }
 
     receive() external payable {}
@@ -42,15 +42,15 @@ contract ArrayDeletionBug {
 }
 
 contract FixedArrayDeletion {
-    uint[] public myArray = [1, 2, 3, 4, 5];
+    uint[] public arr = [1, 2, 3, 4, 5];
 
     function deleteElement(uint index) public {
-        require(index < myArray.length, "Invalid index");
-        myArray[index] = myArray[index-1];
-        myArray.pop();
+        require(index < arr.length, "Invalid index");
+        arr[index] = arr[index-1];
+        arr.pop();
     }
 
     function getLength() public view returns (uint) {
-        return myArray.length;
+        return arr.length;
     }
 }
