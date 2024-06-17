@@ -24,10 +24,10 @@ contract Auction {
         NFT = IERC721(NFTaddress);
     }
 
-    event Start(uint256 startTime, uint256 endTime, uint256 NFT);
-    event Bid(address sender, uint256 amount);
-    event Withdraw(address bid);
-    event End(address winner, uint256 amount);
+    event Start(uint256 indexed startTime, uint256 indexed endTime, uint256 indexed NFT);
+    event Bid(address indexed sender, uint256 indexed amount);
+    event Withdraw(address indexed bid);
+    event End(address indexed winner, uint256 indexed amount);
 
     receive() external payable {}
 

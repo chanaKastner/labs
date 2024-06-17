@@ -32,7 +32,7 @@ contract Function {
 }
 
 contract XYZ {
-    function someFuncWithManyInputs(uint x, uint y, uint z, address a, bool b, string c) public pure returns (uint ) { }
+    function someFuncWithManyInputs(uint x, uint y, uint z, address a, bool b, string memory c) public pure returns (uint ) { }
     function callFunc() external pure returns (uint256) {
         return someFuncWithManyInputs(1, 2, 3, address(0), true, "c");
     }
