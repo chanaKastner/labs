@@ -4,7 +4,7 @@ pragma solidity ^0.8.24;
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
 import {IERC20} from "forge-std/interfaces/IERC20.sol";
-import {BondToken} from "./tokens/bond.sol";
+import {Bond} from "./tokens/bond.sol";
 import "../../lib/foundry-chainlink-toolkit/src/interfaces/feeds/AggregatorV2V3Interface.sol";
 
 contract LendingProject {
